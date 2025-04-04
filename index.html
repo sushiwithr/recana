@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rian Raine - Portfolio</title> <!-- Updated title -->
+  <meta name="description" content="Personal portfolio website showcasing my work and skills" />
+  <meta name="author" content="Rian Raine" />
+
+  <meta property="og:title" content="Rian Raine - Portfolio" /> <!-- Updated Open Graph title -->
+  <meta property="og:description" content="Personal portfolio website showcasing my work and skills" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Base styles */
+    :root {
+      --pink-light: #FFDEE2;
+      --pink-default: #FF5D8F;
+      --pink-dark: #D93670;
+      --background: #FFF8F9;
+      --foreground: #2F1B26;
+      --border: #FFDEE2;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      animation: fadeInUp 1s ease-out;
+      margin: 0;
+      background-color: #fff0f5;
+      overflow: hidden; /* Disable scrolling initially */
+    }
+    
+    body.scroll-enabled {
+      overflow: auto; /* Enable scrolling */
+    }
+    
+    a {
+      color: var(--pink-default);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: var(--pink-dark);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: none;
+    }
+    
+    .container.active {
+      display: block;
+    }
+    
+    /* Card styles */
+    .card {
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Profile block */
+    .profile-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      background: linear-gradient(to right, white, rgba(255, 222, 226, 0.2));
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @media (min-width: 768px) {
+      .profile-block {
+        flex-direction: row;
+        text-align: left;
+      }
+    }
+    
+    .avatar {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      border: 4px solid var(--pink-default);
+      margin-bottom: 1rem;
+      object-fit: cover;
+      transition: transform 0.3s;
+      position: relative;
+      z-index: 1;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .avatar:hover {
+      transform: scale(1.05);
+      animation: pulseGlow 1.5s infinite alternate;
+    }
+    
+    @media (min-width: 768px) {
+      .avatar {
+        margin-right: 2rem;
+        margin-bottom: 0;
+      }
+    }
+    
+    .avatar-glow {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, #FF5D8F, #FFDEE2);
+      opacity: 0.7;
+      filter: blur(8px);
+      z-index: -1;
+      transition: opacity 0.5s;
+    }
+    
+    .avatar:hover + .avatar-glow {
+      opacity: 1;
+    }
+    
+    .profile-content {
+      text-align: center;
+    }
+    
+    @media (min-width: 768px) {
+      .profile-content {
+        text-align: left;
+      }
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--pink-default), var(--pink-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--pink-default);
+    }
+    
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+      animation: scaleIn 0.5s ease-out;
+    }
+    
+    .nav-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--pink-default); /* Changed border color to pink */
+    }
+    
+    .nav-button.active {
+      background-color: var(--pink-default);
+      color: white;
+    }
+    
+    .nav-button:not(.active) {
+      background-color: white;
+      border: 1px solid var(--pink-default); /* Ensure non-active buttons also have pink borders */
+    }
+    
+    .nav-button:not(.active):hover {
+      background-color: var(--pink-light);
+      color: var(--pink-dark);
+    }
+    
+    .nav-button:hover {
+      transform: scale(1.1);
+      transition: all 0.3s ease-in-out;
+    }
+    
+    /* Sections */
+    .section {
+      padding: 2rem 0;
+      animation: fadeIn 0.5s ease-out;
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title span {
+      border-bottom: 2px solid var(--pink-default);
+      padding-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--pink-default), var(--pink-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 10px rgba(255, 93, 143, 0.4); }
+      50% { box-shadow: 0 0 20px rgba(255, 93, 143, 0.6); }
+      100% { box-shadow: 0 0 10px rgba(255, 93, 143, 0.4); }
+    }
+
+    @keyframes falling-petals {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .petal {
+      position: fixed;
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      background: url('petal.png') no-repeat center;
+      background-size: contain;
+      opacity: 0;
+      animation: falling-petals 5s linear infinite;
+    }
+
+    /* Bloom Reveal Garden Styles */
+    .flower {
+      width: 300px;
+      aspect-ratio: 1;
+      --g:/37.02% 37.02% radial-gradient(#000 calc(71% - 1px), #0000 71%) no-repeat;
+      mask: 100% 50% var(--g), 65.451% 97.553% var(--g), 9.549% 79.389% var(--g), 9.549% 20.611% var(--g), 65.451% 2.447% var(--g), radial-gradient(100% 100%, #000 25.476%, #0000 calc(25.476% + 1px));
+      background: radial-gradient(circle, pink, deeppink);
+      position: absolute;
+      transition: opacity 2.0s ease, transform .0s ease;
+      cursor: pointer;
+    }
+
+    .hidden {
+      opacity: 0;
+      transform: scale(0.5);
+      pointer-events: none;
+    }
+
+  #background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Ensure it stays behind all content */
+  }
+  </style>
+</head>
+<body>
+  <script>
+  // Check if the loading screen has already been shown
+  if (!sessionStorage.getItem('loadingScreenShown')) {
+    // Redirect to loading.html
+    window.location.href = 'loading.html';
+  }
+  </script>
+  <!-- Bloom Reveal Garden -->
+<!-- Left to Right Flowers -->
+<div class="flower" style="top: 5%; left: 10%;"></div>
+<div class="flower" style="top: 10%; left: 15%;"></div>
+<div class="flower" style="top: 15%; left: 20%;"></div>
+<div class="flower" style="top: 20%; left: 25%;"></div>
+<div class="flower" style="top: 25%; left: 30%;"></div>
+<div class="flower" style="top: 30%; left: 35%;"></div>
+<div class="flower" style="top: 35%; left: 40%;"></div>
+<div class="flower" style="top: 40%; left: 45%;"></div>
+<div class="flower" style="top: 45%; left: 50%;"></div>
+<div class="flower" style="top: 50%; left: 55%;"></div>
+<div class="flower" style="top: 55%; left: 60%;"></div>
+<div class="flower" style="top: 60%; left: 65%;"></div>
+<div class="flower" style="top: 65%; left: 70%;"></div>
+<div class="flower" style="top: 70%; left: 75%;"></div>
+<div class="flower" style="top: 75%; left: 80%;"></div>
+<div class="flower" style="top: 80%; left: 85%;"></div>
+<div class="flower" style="top: 85%; left: 90%;"></div>
+<div class="flower" style="top: 25%; left: 70%;"></div>
+<div class="flower" style="top: 60%; left: 30%;"></div>
+<div class="flower" style="top: 35%; left: 80%;"></div>
+<div class="flower" style="top: 45%; left: 20%;"></div>
+<div class="flower" style="top: 10%; left: 60%;"></div>
+<div class="flower" style="top: 80%; left: 10%;"></div>
+<div class="flower" style="top: 70%; left: 50%;"></div>
+<div class="flower" style="top: 55%; left: 25%;"></div>
+<div class="flower" style="top: 15%; left: 85%;"></div>
+
+<!-- Top Right Flowers -->
+<div class="flower" style="top: 0%; left: 100%; transform: translate(-100%, 0);"></div>
+<div class="flower" style="top: 5%; left: 95%;"></div>
+<div class="flower" style="top: 10%; left: 90%;"></div>
+<div class="flower" style="top: 15%; left: 85%;"></div>
+<div class="flower" style="top: 20%; left: 80%;"></div>
+<div class="flower" style="top: 25%; left: 75%;"></div>
+<div class="flower" style="top: 30%; left: 70%;"></div>
+<div class="flower" style="top: 35%; left: 65%;"></div>
+<div class="flower" style="top: 40%; left: 60%;"></div>
+<div class="flower" style="top: 45%; left: 55%;"></div>
+<div class="flower" style="top: 50%; left: 50%;"></div>
+<div class="flower" style="top: 55%; left: 45%;"></div>
+<div class="flower" style="top: 60%; left: 40%;"></div>
+<div class="flower" style="top: 65%; left: 35%;"></div>
+<div class="flower" style="top: 70%; left: 30%;"></div>
+<div class="flower" style="top: 75%; left: 25%;"></div>
+<div class="flower" style="top: 80%; left: 20%;"></div>
+<div class="flower" style="top: 85%; left: 15%;"></div>
+<div class="flower" style="top: 90%; left: 10%;"></div>
+<div class="flower" style="top: 95%; left: 5%;"></div>
+<div class="flower" style="top: 100%; left: 0%; transform: translateY(-100%);"></div>
+
+<!-- Extra Flowers -->
+<div class="flower" style="top: 10%; left: 40%;"></div>
+<div class="flower" style="top: 15%; left: 45%;"></div>
+<div class="flower" style="top: 20%; left: 50%;"></div>
+<div class="flower" style="top: 25%; left: 55%;"></div>
+<div class="flower" style="top: 30%; left: 60%;"></div>
+<div class="flower" style="top: 35%; left: 65%;"></div>
+<div class="flower" style="top: 40%; left: 70%;"></div>
+<div class="flower" style="top: 45%; left: 75%;"></div>
+<div class="flower" style="top: 50%; left: 80%;"></div>
+<div class="flower" style="top: 55%; left: 85%;"></div>
+
+<!-- Upper Left Flowers -->
+<div class="flower" style="top: 0%; left: 0%; transform: translate(0, 0);"></div>
+<div class="flower" style="top: 5%; left: 5%;"></div>
+<div class="flower" style="top: 10%; left: 10%;"></div>
+<div class="flower" style="top: 15%; left: 15%;"></div>
+<div class="flower" style="top: 20%; left: 20%;"></div>
+<div class="flower" style="top: 25%; left: 25%;"></div>
+<div class="flower" style="top: 30%; left: 30%;"></div>
+<div class="flower" style="top: 35%; left: 35%;"></div>
+<div class="flower" style="top: 40%; left: 40%;"></div>
+<div class="flower" style="top: 45%; left: 45%;"></div>
+
+<!-- Center Left Flowers -->
+<div class="flower" style="top: 48%; left: 8%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 52%; left: 12%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 46%; left: 10%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 54%; left: 6%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 50%; left: 14%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 47%; left: 9%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 53%; left: 13%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 49%; left: 11%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 51%; left: 10%; transform: translate(-50%, -50%);"></div>
+<div class="flower" style="top: 45%; left: 8%; transform: translate(-50%, -50%) scale(1.2);"></div>
+
+  <!-- Video Background -->
+  <video autoplay muted loop id="background-video">
+    <source src="Sakura Pink Flower Background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <audio id="click-sound" src="click.m4a"></audio>
+  <audio id="background-music" src="bgm.m4a" autoplay loop></audio>
+
+  <div class="container">
+    <!-- Profile block -->
+    <div class="profile-block">
+      <div style="position: relative;">
+        <img 
+          src="pfp.jpg" 
+          alt="Profile Picture"
+          class="avatar"
+        />
+        <div class="avatar-glow"></div>
+      </div>
+      
+      <div class="profile-content">
+        <h1 class="gradient-text" style="font-size: 1.875rem; font-weight: bold; margin-bottom: 0.5rem;">Rian Raine</h1>
+        <p style="font-size: 1.25rem; color: var(--pink-dark); margin-bottom: 0.5rem;">Web Developer & Designer</p>
+        <p style="max-width: 32rem;">Passionate about creating beautiful, user-friendly web experiences that make a difference.</p>
+      </div>
+    </div>
+    
+    <!-- Navigation buttons -->
+    <div class="nav-buttons">
+      <button class="nav-button active" onclick="showSection('about')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>About Me</span>
+      </button>
+      <button class="nav-button" onclick="showSection('projects')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        <span>Projects</span>
+      </button>
+      <button class="nav-button" onclick="showSection('hobbies')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>Hobbies</span>
+      </button>
+      <button class="nav-button" onclick="showSection('contact')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span>Contact</span>
+      </button>
+    </div>
+    
+    <!-- About Me section -->
+    <section id="about" class="section active">
+      <h2 class="section-title">
+        <span>About Me</span>
+      </h2>
+      <div class="card">
+        <p style="font-size: 1.125rem; margin-bottom: 1rem;">
+          Hiii! I am Rian Raine. I am a student with a deep passion for coding and UI/UX design, a journey I started back in grade school. Technology and design have always fascinated me, and I love bringing ideas to life through intuitive and visually appealing digital experiences. I am constantly exploring new trends, tools, and techniques to refine my skills and stay ahead in the ever-evolving world of tech.
+        </p>
+        
+        <p style="margin-bottom: 1rem;">
+          When I'm not immersed in code, you'll likely find me expressing my creativity in other ways—whether it's sewing and designing unique pieces, crocheting intricate patterns, or diving into the world of romance novels. Reading allows me to escape into different stories and perspectives, while my love for experimenting in the kitchen lets me play with flavors and create new recipes.
+        </p>
+        
+        <p style="margin-bottom: 2rem;">
+          I believe that learning never stops, and I’m always eager to explore new technologies, challenge myself, and improve in every aspect of my craft. Whether it's designing user-friendly interfaces, working on a new creative project, or simply embracing a new hobby, I strive to push my boundaries and grow every day. Let’s create, innovate, and make something amazing together! 🍓✨
+        </p>
+        
+        <!-- Small box with photo -->
+        <div style="display: flex; align-items: center; gap: 1rem; background-color: #FFF8F9; padding: 1rem; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); margin-top: 1.5rem;">
+          <img 
+            src="pfp.jpg" 
+            alt="Rian Raine" 
+            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--pink-default);"
+          />
+          <p style="margin: 0; font-size: 0.875rem; color: var(--foreground);">
+            Hi, I'm Rian Raine! This is a quick snapshot of me. I love coding, designing, and exploring creative hobbies. Let's connect and create something amazing together!
+          </p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+          <div>
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: var(--pink-dark); margin-bottom: 0.5rem;">Education</h3>
+            <ul style="list-style-type: none;">
+              <li style="margin-bottom: 0.5rem;">
+                <p style="font-weight: 500;">San Beda College Alabang</p>
+                <p style="font-size: 0.875rem; color: #666;">High School</p>
+              </li>
+              <li>
+                <p style="font-weight: 500;">De La Salle Santiago Zobel School</p>
+                <p style="font-size: 0.875rem; color: #666;">Grade School</p>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: var(--pink-dark); margin-bottom: 0.5rem;">Interests</h3>
+            <ul style="list-style-type: disc; padding-left: 1.5rem;">
+              <li>Front-end Development</li>
+              <li>User Experience Design</li>
+              <li>Accessibility</li>
+              <li>Web Animation</li>
+              <li>Open Source Projects</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Projects section -->
+    <section id="projects" class="section">
+      <h2 class="section-title">
+        <span>My Projects</span>
+      </h2>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="color: #666;">Projects section coming soon...</p>
+      </div>
+    </section>
+    
+    <!-- Hobbies section -->
+    <section id="hobbies" class="section">
+      <h2 class="section-title">
+        <span>Hobbies</span>
+      </h2>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="font-size: 1.125rem; margin-bottom: 1rem;">Here are some of my favorite hobbies:</p>
+        <ul style="list-style-type: disc; padding-left: 1.5rem; text-align: left;">
+          <li>Hiking and exploring nature</li>
+          <li>Reading science fiction novels</li>
+          <li>Experimenting with new recipes</li>
+          <li>Photography and capturing moments</li>
+          <li>Learning new technologies and coding for fun</li>
+        </ul>
+      </div>
+    </section>
+    
+    <!-- Skills section -->
+    <section id="skills" class="section">
+      <h2 class="section-title">
+        <span>Skills & Expertise</span>
+      </h2>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="color: #666;">Skills section coming soon...</p>
+      </div>
+    </section>
+    
+    <!-- Contact section -->
+    <section id="contact" class="section">
+      <h2 class="section-title">
+        <span>Get In Touch</span>
+      </h2>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="font-size: 1.125rem; margin-bottom: 1rem;">Feel free to reach out to me through the following channels:</p>
+        <ul style="list-style-type: none; padding: 0; text-align: center;">
+          <li style="margin-bottom: 1rem;">
+            <strong>Email:</strong> 
+            <a href="mailto:rrianraine@gmail.com" style="color: var(--pink-default); text-decoration: none;">rrianraine@gmail.com</a>
+          </li>
+          <li>
+            <strong>Instagram:</strong> 
+            <a href="https://www.instagram.com/rxine.rcn" target="_blank" style="color: var(--pink-default); text-decoration: none;">@rxine.rcn</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  
+  <script>
+    function showSection(sectionId) {
+      // Play the click sound
+      const clickSound = document.getElementById('click-sound');
+      clickSound.playbackRate = 1.5; // Set playback rate to 1.5x
+      clickSound.currentTime = 0; // Reset the audio to the start
+      clickSound.play();
+
+      // Hide all sections and deactivate all buttons
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+
+      document.querySelectorAll('.nav-button').forEach(button => {
+        button.classList.remove('active');
+      });
+
+      // Show the selected section and activate button
+      document.getElementById(sectionId).classList.add('active');
+      document.querySelector(`.nav-button[onclick="showSection('${sectionId}')"]`).classList.add('active');
+    }
+
+    // Initialize
+    window.onload = function() {
+      showSection('about');
+      document.getElementById('background-music').volume = 0.5; // Set volume to 50%
+    };
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function createPetal() {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        document.body.appendChild(petal);
+
+        setTimeout(() => {
+          petal.remove();
+        }, 5000);
+      }
+
+      setInterval(createPetal, 400);
+    });
+
+    const flowers = document.querySelectorAll('.flower');
+    const music = document.getElementById('background-music');
+    const mainContent = document.querySelector('.container');
+    let musicStarted = false;
+
+    flowers.forEach(flower => {
+      flower.addEventListener('click', () => {
+        if (!musicStarted) {
+          music.play();
+          musicStarted = true;
+        }
+
+        let delay = 0;
+        flowers.forEach(f => {
+          setTimeout(() => {
+            f.classList.add('hidden');
+          }, delay);
+          delay += 200;
+        });
+
+        // Reveal the main content and enable scrolling after the flowers disappear
+        setTimeout(() => {
+          mainContent.classList.add('active');
+          document.body.classList.add('scroll-enabled'); // Enable scrolling
+        }, delay + 500);
+      });
+    });
+  </script>
+</body>
+</html>
