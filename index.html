@@ -337,6 +337,13 @@
   </style>
 </head>
 <body>
+  <script>
+  // Check if the loading screen has already been shown
+  if (!sessionStorage.getItem('loadingScreenShown')) {
+    // Redirect to loading.html
+    window.location.href = 'loading.html';
+  }
+  </script>
   <!-- Bloom Reveal Garden -->
 <!-- Left to Right Flowers -->
 <div class="flower" style="top: 5%; left: 10%;"></div>
